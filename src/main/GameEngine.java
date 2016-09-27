@@ -20,7 +20,7 @@ public class GameEngine
       {
         for(int k=1; k<31; k++)
         {
-          if((k+i+j)%3==0)
+          if((k+i+j)%10==0)
           {
             board[i][j][k]=true;
           }

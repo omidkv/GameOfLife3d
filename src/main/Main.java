@@ -53,6 +53,7 @@ public class Main extends Application
   Slider slider3;
 
   long lastUpdate = 0;
+  long lastRender = 0;
 
   @Override
   public void start(Stage primaryStage) throws Exception
@@ -179,7 +180,6 @@ public class Main extends Application
           cells[i][j][k].box.setTranslateX(i - 15);
           cells[i][j][k].box.setTranslateY(j - 15);
           cells[i][j][k].box.setTranslateZ(k - 15);
-          cells[i][j][k].box.setMaterial(aqua);
           cube.getChildren().add(cells[i][j][k].box);
 
         }
@@ -194,14 +194,7 @@ public class Main extends Application
     @Override
     public void handle(long now)
     {
-      PhongMaterial aqua = new PhongMaterial();
-      aqua.setSpecularColor(Color.GREEN);
-      aqua.setDiffuseColor(Color.GREEN);
 
-      PhongMaterial red = new PhongMaterial();
-      red.setSpecularColor(Color.RED);
-      red.setDiffuseColor(Color.RED);
-      System.out.println(now);
       if (now - lastUpdate > 1_000_000_000 )
       {
         lastUpdate = now;
@@ -212,13 +205,18 @@ public class Main extends Application
           {
             for (int k = 1; k < 31; k++)
             {
-              if (!gameEngine.board[i][j][k])
+              if (gameEngine.board[i][j][k])
               {
-                cells[i][j][k].wasDead = true;
+                cells[i][j][k].isBecomingAlive = false;
+                cells[i][j][k].wasAlive = true;
+
+
               }
               else
               {
-                cells[i][j][k].wasAlive = true;
+                cells[i][j][k].isDying = false;
+                cells[i][j][k].wasDead = true;
+                cells[i][j][k].box.setVisible(false);
 
               }
             }
@@ -234,29 +232,35 @@ public class Main extends Application
               if (!gameEngine.board[i][j][k])
               {
                 cells[i][j][k].isDying = true;
+                cells[i][j][k].update();
               }
               else
               {
                 cells[i][j][k].isBecomingAlive = true;
-
+                cells[i][j][k].update();
               }
             }
           }
         }
       }
-      for ( int i = 1; i < 31; i++)
+      if(now - lastRender >= 200_000_000)
       {
-        for ( int j = 1; j < 31; j++)
+        lastRender =now;
+        for (int i = 1; i < 31; i++)
         {
-          for ( int k = 1; k < 31; k++)
+          for (int j = 1; j < 31; j++)
           {
-          cells[i][j][k].update();
+            for (int k = 1; k < 31; k++)
+            {
+              cells[i][j][k].update();
+            }
           }
         }
-      }
+        System.out.println("HERE");
 
-      cameraXform.ry.setAngle(cameraXform.ry.getAngle() + 5);
-      cameraXform.rx.setAngle(cameraXform.rx.getAngle() + 5);
+      }
+      cameraXform.ry.setAngle(cameraXform.ry.getAngle() + 1);
+      cameraXform.rx.setAngle(cameraXform.rx.getAngle() + 1);
     }
   }
 
