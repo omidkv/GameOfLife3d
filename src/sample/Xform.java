@@ -41,7 +41,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package main;
+package sample;
 
 
 import javafx.scene.Group;
@@ -51,6 +51,7 @@ import javafx.scene.transform.Translate;
 
 public class Xform extends Group
 {
+
 
   public enum RotateOrder
   {
